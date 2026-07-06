@@ -27,21 +27,15 @@ function getQueryParam(name) {
 
 function setAnimation(type) {
   const src = animations[type] || animations.idle;
-
   video.src = src;
   video.muted = true;
   video.loop = true;
   video.playsInline = true;
   video.load();
-
-  video.play().catch(function (err) {
-    console.log("Video autoplay blocked or failed:", err);
-  });
+  video.play().catch(err => console.log("Video play failed:", err));
 }
 
 function renderTickets(tickets) {
-  if (!ticketList) return;
-
   ticketList.innerHTML = "";
 
   if (!tickets || tickets.length === 0) {
@@ -52,13 +46,11 @@ function renderTickets(tickets) {
   tickets.forEach(ticket => {
     const div = document.createElement("div");
     div.className = "ticket-card";
-
     div.innerHTML = `
       <div class="ticket-key">${ticket.key}</div>
       <div class="ticket-priority">${ticket.priority || "No Priority"}</div>
       <div class="ticket-summary">${ticket.summary || ""}</div>
     `;
-
     ticketList.appendChild(div);
   });
 }
@@ -68,47 +60,43 @@ function loadData() {
   const audioUrl = getQueryParam("audio");
   const mode = getQueryParam("mode") || "talking";
 
-  let tickets = [];
+  recipientName.textContent = `Jira Ticket Update for ${name}`;
+  summaryText.textContent = `Maina has prepared a ticket update for ${name}.`;
 
+  let tickets = [];
   try {
     const ticketJson = getQueryParam("tickets");
     if (ticketJson) {
       tickets = JSON.parse(decodeURIComponent(ticketJson));
     }
   } catch (e) {
-    console.log("Invalid ticket JSON", e);
-  }
-
-  if (recipientName) {
-    recipientName.textContent = `Jira Ticket Update for ${name}`;
-  }
-
-  if (summaryText) {
-    summaryText.textContent = `Maina has prepared a ticket update for ${name}.`;
+    console.log("Ticket JSON invalid:", e);
   }
 
   renderTickets(tickets);
 
-  if (audioUrl) {
-    audio.src = audioUrl;
-  }
-
   setAnimation("idle");
 
-  if (playBtn) {
-    playBtn.onclick = async function () {
-      setAnimation(mode);
-
-      if (audioUrl) {
-        audio.currentTime = 0;
-        try {
-          await audio.play();
-        } catch (e) {
-          console.log("Audio play blocked:", e);
-        }
-      }
-    };
+  if (audioUrl) {
+    audio.src = audioUrl;
+    audio.load();
   }
+
+  playBtn.onclick = async function () {
+    setAnimation(mode);
+
+    if (audioUrl) {
+      audio.currentTime = 0;
+      try {
+        await audio.play();
+      } catch (e) {
+        alert("Browser blocked audio. Please click Play again.");
+        console.log("Audio error:", e);
+      }
+    } else {
+      alert("No audio URL found.");
+    }
+  };
 
   audio.onended = function () {
     setAnimation("idle");
