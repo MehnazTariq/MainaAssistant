@@ -23,10 +23,32 @@ body {
   justify-content: center;
 }
 
-.maina-video {
+.maina-stage {
   width: 100%;
   height: 82vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.maina-video {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  animation: headMove 5s ease-in-out infinite;
+}
+
+.blink-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.blink-layer.blink {
+  animation: blinkFlash 0.18s ease-in-out;
 }
 
 .controls {
@@ -79,4 +101,24 @@ button {
 .ticket-summary {
   margin-top: 6px;
   color: #172b4d;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.012); }
+  100% { transform: scale(1); }
+}
+
+@keyframes headMove {
+  0% { transform: rotate(0deg) translateY(0); }
+  25% { transform: rotate(0.4deg) translateY(-2px); }
+  50% { transform: rotate(0deg) translateY(0); }
+  75% { transform: rotate(-0.4deg) translateY(-1px); }
+  100% { transform: rotate(0deg) translateY(0); }
+}
+
+@keyframes blinkFlash {
+  0% { opacity: 0; }
+  50% { opacity: 0.14; background: rgba(0,0,0,0.15); }
+  100% { opacity: 0; }
 }
