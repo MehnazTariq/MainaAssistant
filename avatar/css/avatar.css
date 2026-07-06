@@ -29,10 +29,6 @@ body {
   object-fit:contain;
 }
 
-.controls {
-  margin-top: 16px;
-}
-
 button {
   background: #0052cc;
   color: white;
