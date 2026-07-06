@@ -6,20 +6,25 @@
   <title>Maina AI Assistant</title>
   <link rel="stylesheet" href="./css/avatar.css" />
 </head>
+
 <body>
   <div class="maina-container">
     <div class="avatar-panel">
-      <video id="mainaVideo" class="maina-video" autoplay muted loop playsinline></video>
+      <div id="mainaStage" class="maina-stage">
+        <video id="mainaVideo" class="maina-video" autoplay muted loop playsinline></video>
+        <div id="blinkLayer" class="blink-layer"></div>
+      </div>
+
       <audio id="mainaAudio"></audio>
 
       <div class="controls">
-        <button id="playBtn">▶ Play Maina Audio</button>
+        <button id="playBtn">▶ Play Maina</button>
       </div>
     </div>
 
     <div class="ticket-panel">
       <h2 id="recipientName">Jira Ticket Update</h2>
-      <p id="summaryText">Maina is ready to speak.</p>
+      <p id="summaryText">Maina is ready.</p>
       <div id="ticketList" class="ticket-list"></div>
     </div>
   </div>
