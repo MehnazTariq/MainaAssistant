@@ -16,23 +16,25 @@ const animations = {
 const video = document.getElementById("mainaVideo");
 const audio = document.getElementById("mainaAudio");
 const playBtn = document.getElementById("playBtn");
-
 const recipientName = document.getElementById("recipientName");
 const summaryText = document.getElementById("summaryText");
 const ticketList = document.getElementById("ticketList");
 
-function getQueryParam(name) {
+function getParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-function setAnimation(type) {
-  const src = animations[type] || animations.idle;
-  video.src = src;
+function setAnimation(mode) {
+  const src = animations[mode] || animations.idle;
+
+  if (video.src !== src) {
+    video.src = src;
+    video.load();
+  }
+
   video.muted = true;
   video.loop = true;
-  video.playsInline = true;
-  video.load();
-  video.play().catch(err => console.log("Video play failed:", err));
+  video.play().catch(() => {});
 }
 
 function renderTickets(tickets) {
@@ -44,33 +46,35 @@ function renderTickets(tickets) {
   }
 
   tickets.forEach(ticket => {
-    const div = document.createElement("div");
-    div.className = "ticket-card";
-    div.innerHTML = `
+    const card = document.createElement("div");
+    card.className = "ticket-card";
+
+    card.innerHTML = `
       <div class="ticket-key">${ticket.key}</div>
       <div class="ticket-priority">${ticket.priority || "No Priority"}</div>
       <div class="ticket-summary">${ticket.summary || ""}</div>
     `;
-    ticketList.appendChild(div);
+
+    ticketList.appendChild(card);
   });
 }
 
-function loadData() {
-  const name = getQueryParam("name") || "Team Member";
-  const audioUrl = getQueryParam("audio");
-  const mode = getQueryParam("mode") || "talking";
+function loadMaina() {
+  const name = getParam("name") || "Team Member";
+  const mode = getParam("mode") || "talking";
+  const audioUrl = getParam("audio");
 
   recipientName.textContent = `Jira Ticket Update for ${name}`;
   summaryText.textContent = `Maina has prepared a ticket update for ${name}.`;
 
   let tickets = [];
   try {
-    const ticketJson = getQueryParam("tickets");
-    if (ticketJson) {
-      tickets = JSON.parse(decodeURIComponent(ticketJson));
+    const ticketsParam = getParam("tickets");
+    if (ticketsParam) {
+      tickets = JSON.parse(decodeURIComponent(ticketsParam));
     }
   } catch (e) {
-    console.log("Ticket JSON invalid:", e);
+    console.log("Invalid tickets JSON", e);
   }
 
   renderTickets(tickets);
@@ -82,25 +86,26 @@ function loadData() {
     audio.load();
   }
 
-  playBtn.onclick = async function () {
+  playBtn.onclick = async () => {
+    if (!audioUrl) {
+      alert("No audio URL found.");
+      return;
+    }
+
     setAnimation(mode);
 
-    if (audioUrl) {
-      audio.currentTime = 0;
-      try {
-        await audio.play();
-      } catch (e) {
-        alert("Browser blocked audio. Please click Play again.");
-        console.log("Audio error:", e);
-      }
-    } else {
-      alert("No audio URL found.");
+    audio.currentTime = 0;
+
+    try {
+      await audio.play();
+    } catch (e) {
+      alert("Audio blocked by browser. Click Play again.");
     }
   };
 
-  audio.onended = function () {
+  audio.onended = () => {
     setAnimation("idle");
   };
 }
 
-document.addEventListener("DOMContentLoaded", loadData);
+document.addEventListener("DOMContentLoaded", loadMaina);
