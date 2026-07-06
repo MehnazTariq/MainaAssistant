@@ -83,14 +83,24 @@ function loadData() {
 
   setAnimation("idle");
 
-  playBtn.onclick = async () => {
-    setAnimation(mode);
+window.onload = async () => {
 
-    if (audioUrl) {
-      audio.currentTime = 0;
-      await audio.play();
+    if(audioUrl){
+
+        setAnimation(mode);
+
+        audio.currentTime=0;
+
+        try{
+            await audio.play();
+        }
+        catch(e){
+            console.log(e);
+        }
+
     }
-  };
+
+};
 
   audio.onended = () => {
     setAnimation("idle");
