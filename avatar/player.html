@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maina AI Assistant</title>
+
+  <link rel="stylesheet" href="./css/avatar.css" />
+</head>
+
+<body>
+  <div class="maina-container">
+
+    <div class="avatar-panel">
+      <video
+        id="mainaVideo"
+        class="maina-video"
+        autoplay
+        muted
+        loop
+        playsinline>
+      </video>
+
+      <audio id="mainaAudio"></audio>
+
+      <div class="controls">
+        <button id="playBtn">▶ Play Maina</button>
+      </div>
+    </div>
+
+    <div class="ticket-panel">
+      <h2 id="recipientName">Jira Ticket Update</h2>
+      <p id="summaryText">Maina is ready to speak.</p>
+
+      <div id="ticketList" class="ticket-list"></div>
+    </div>
+
+  </div>
+
+  <script src="./js/avatarPlayer.js"></script>
+</body>
+</html>
