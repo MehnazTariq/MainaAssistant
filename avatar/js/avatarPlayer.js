@@ -1,4 +1,4 @@
-const BASE_URL = "https://raw.githubusercontent.com/MehnazTariq/MainaAssistant/main/avatar/animations/";
+const BASE_URL = ""https://mehnaztariq.github.io/MainaAssistant/avatar/animations/";
 
 const animations = {
   idle: BASE_URL + "maina_idle.webm",
