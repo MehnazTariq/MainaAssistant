@@ -15,7 +15,6 @@ const animations = {
 
 const video = document.getElementById("mainaVideo");
 const audio = document.getElementById("mainaAudio");
-const playBtn = document.getElementById("playBtn");
 
 const recipientName = document.getElementById("recipientName");
 const summaryText = document.getElementById("summaryText");
